@@ -19,6 +19,7 @@ jobs:
 #          paths:
 #            - vendor
 #      - run: ./vendor/bin/phpunit
+
   "php-7.0":
     docker:
       - image: circleci/php:7.0-browsers
@@ -36,9 +37,17 @@ jobs:
             - vendor
       - run: ./vendor/bin/phpunit
 
+
+
+
+
 workflows:
   version: 2
   build:
     jobs:
 #      - "php-7.1"
       - "php-7.0"
+        filters:
+          branches:
+            only:
+              - test1
