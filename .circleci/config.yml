@@ -45,7 +45,7 @@ workflows:
   version: 2
   build:
     jobs:
-      - "php70":
+      - "php7.0":
           filters:
             branches:
               only:
