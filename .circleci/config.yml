@@ -20,7 +20,7 @@ jobs:
 #            - vendor
 #      - run: ./vendor/bin/phpunit
 
-  "php70":
+  "php7.0":
     docker:
       - image: circleci/php:7.0-browsers
     working_directory: ~/laravel
