@@ -2,4 +2,9 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destinantion: /tmp
+    destinantion: /home/ec2-user/test
+hooks:
+  AfterInstall:
+    - location: RunChown.sh
+      timeout: 180
+
