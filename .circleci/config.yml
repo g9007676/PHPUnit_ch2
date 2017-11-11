@@ -1,25 +1,6 @@
 version: 2.0
 
 jobs:
-#  "php-7.1":
-#    docker:
-#      - image: circleci/php:7.1-browsers
-#    working_directory: ~/laravel
-#    environment:
-#      TZ: "/usr/share/zoneinfo/Asia/Taipei"
-#    steps:
-#      - checkout
-#      - restore_cache:
-#          keys:
-#            - composer-v1-{{ checksum "composer.json" }}
-#            - composer-v1-
-#      - run: composer install -n --prefer-dist
-#      - save_cache:
-#          key: composer-v1-{{ checksum "composer.json" }}
-#          paths:
-#            - vendor
-#      - run: ./vendor/bin/phpunit
-
   "php7.0":
     docker:
       - image: circleci/php:7.0-browsers
@@ -38,18 +19,50 @@ jobs:
       - run: ./vendor/bin/phpunit
 
 
-
+  deploy-job:
+    docker:
+      - image: vul3a94/resource:latest
+    working_directory: /home/circleci/laravel
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - composer-v1-{{ checksum "composer.lock" }}
+ #      - setup_remote_docker
+ #      - run: cp .env.example .env
+      - run:
+          name: config deploy
+          command: |
+            aws --version && \
+            aws configure set default.region ap-northeast-1 && \
+            aws configure set default.output json
+      - run:
+          name: push code to s3
+          command: |
+            aws deploy push \
+            --application-name deploy \
+            --s3-location s3://zheyu-code/master-"$CIRCLE_SHA1" \
+            --source .
+#      - run:
+#          name: create-deployment and check
+#          command: |
+#               /bin/sh ./deploy.sh
 
 
 workflows:
   version: 2
   build:
     jobs:
-      - "php7.0":
+      - "php7.0"
+      - deploy-job:
           filters:
             branches:
               only:
-                - test1
+                - master
+          requires:
+            - "php7.0"
+
+
 #  "php-7.0":
 #  build:
 #    jobs:
