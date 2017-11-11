@@ -17,6 +17,7 @@ create_dep() {
         stale=$(aws deploy get-deployment --deployment-id "$dep" | $JQ ".deploymentInfo.status")
         if [ "$stale" != "Succeeded" ]
         then
+            echo $(aws deploy get-deployment --deployment-id "$dep")
             echo "Waiting for stale deployments:"
             echo "$stale"
             sleep 5
