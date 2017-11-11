@@ -43,10 +43,10 @@ jobs:
             --application-name deploy \
             --s3-location s3://zheyu-code/master-"$CIRCLE_SHA1" \
             --source .
-#      - run:
-#          name: create-deployment and check
-#          command: |
-#               /bin/sh ./deploy.sh
+      - run:
+          name: create-deployment and check
+          command: |
+               /bin/sh ./deploy.sh
 
 
 workflows:
